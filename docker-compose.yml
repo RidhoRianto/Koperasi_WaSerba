@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: waserba_app
+    restart: unless-stopped
+    ports:
+      - "9001:9000"
+    volumes:
+      - .:/var/www
+    working_dir: /var/www
+    depends_on:
+      - mysql
+    networks:
+      - laravel
+    command: >
+      sh -c "composer install &&
+             php artisan key:generate &&
+             php artisan migrate &&
+             php-fpm"
+
+  mysql:
+    image: mysql:8
+    container_name: waserba_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_DATABASE: laradminlte
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    ports:
+      - "3306:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - laravel
+
+networks:
+  laravel:
+
+volumes:
+  dbdata:
