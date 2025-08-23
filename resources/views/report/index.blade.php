@@ -1,6 +1,6 @@
 @extends('adminlte.layouts.app')
 
-@section('title', 'Uangku | Halaman Laporan')
+@section('title', 'WaSerba | Halaman Laporan')
 
 @section('content')
     <div class="content-wrapper">
@@ -26,8 +26,6 @@
                                         <th>Bulan</th>
                                         <th>Pemasukkan (Rp)</th>
                                         <th>Pengeluaran (Rp)</th>
-                                        <th>Hutang (Rp)</th>
-                                        <th>Tagihan (Rp)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -36,8 +34,6 @@
                                             <td>{{ Carbon\Carbon::createFromFormat('Y-m', $month)->format('F Y') }}</td>
                                             <td>{{ number_format($data['income'], 0, ',', '.') }}</td>
                                             <td>{{ number_format($data['expense'], 0, ',', '.') }}</td>
-                                            <td>{{ number_format($data['debt'], 0, ',', '.') }}</td>
-                                            <td>{{ number_format($data['bill'], 0, ',', '.') }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -46,8 +42,6 @@
                                         <th>Total</th>
                                         <th>{{ number_format($totalIncome, 0, ',', '.') }}</th>
                                         <th>{{ number_format($totalExpense, 0, ',', '.') }}</th>
-                                        <th>{{ number_format($totalDebt, 0, ',', '.') }}</th>
-                                        <th>{{ number_format($totalBill, 0, ',', '.') }}</th>
                                     </tr>
                                 </tfoot>
                             </table><br>

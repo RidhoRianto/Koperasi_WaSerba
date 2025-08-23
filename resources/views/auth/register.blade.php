@@ -2,16 +2,13 @@
 @section('title', 'Register')
 @section('content')
 
-<body class="hold-transition register-page" style="background-color: #3490dc;">
+<body class="hold-transition register-page" style="background-color:rgb(11, 92, 158);">
     <div class="login-container" style="display: flex; height: 100vh;">
-        <div class="login-image" style="flex: 1; background-color: #3490dc; display: flex; align-items: center; justify-content: center;">
+        <div class="login-image" style="flex: 1; background-color:rgb(11, 92, 157); display: flex; align-items: center; justify-content: center;">
             <img src="{{ asset('assetsLanding/img/undraw_regis.svg') }}" alt="Image" class="img-fluid" style="max-width: 100%; height: 400px;">
         </div>
         <div class="login-form-container" style="flex: 1; display: flex; align-items: center; justify-content: center;">
             <div class="login-box" style="width: 100%; max-width: 400px;">
-                <div class="login-logo">
-                    <a href="{{ route('home') }}" style="color: #3490dc; font-weight: 700; font-size: 2rem;">{{ config('app.name', 'Laravel') }}</a>
-                </div>
                 <div class="card" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
                     <div class="card-body register-card-body" style="border-radius: 10px;">
                         <p class="login-box-msg" style="font-size: 1.2rem; color: #555;">Register</p>

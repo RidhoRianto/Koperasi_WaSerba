@@ -1,6 +1,6 @@
 @extends('adminlte.layouts.app')
 
-@section('title', 'Uangku | Halaman Pemasukan')
+@section('title', 'Koperasi WaSerba | Halaman Pemasukan')
 
 @section('content')
     <div class="content-wrapper">
@@ -90,7 +90,6 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <!-- /.card-body -->
                             <div class="card-footer">
                                 <p>Total Pemasukan: Rp {{ number_format($totalIncome, 0, ',', '.') }}</p>
                                 <div class="d-flex justify-content-center">
@@ -100,7 +99,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Chart Section -->
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
@@ -155,7 +153,6 @@
         @endif
     </script>
 
-    <!-- Chart.js Script -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -166,7 +163,7 @@
                     labels: {!! json_encode($months) !!},
                     datasets: [{
                         label: 'Pemasukan',
-                        data: {!! json_encode($incomeData->values()) !!},
+                        data: {!! json_encode($incomeDataForChart) !!},
                         borderColor: 'rgba(75, 192, 192, 1)',
                         backgroundColor: 'rgba(75, 192, 192, 0.2)',
                         fill: true

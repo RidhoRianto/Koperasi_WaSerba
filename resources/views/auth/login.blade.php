@@ -1,95 +1,81 @@
 @extends('adminlte.layouts.auth')
 
 @section('title', 'Login')
+
 @section('content')
+<body class="hold-transition login-page" style="margin:0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+    <div style="display: flex; height: 100vh;">
 
-<body class="hold-transition login-page" style="background-color: #3490dc;">
-    <div class="login-container" style="display: flex; height: 100vh;">
-        <div class="login-image" style="flex: 1; background-color: #3490dc; display: flex; align-items: center; justify-content: center;">
-            <img src="{{ asset('assetsLanding/img/undraw_hello_re_3evm.svg') }}" alt="Image" class="img-fluid" style="max-width: 100%; height: 400px;">
-        </div>
-        <div class="login-form-container" style="flex: 1; display: flex; align-items: center; justify-content: center;">
-            <div class="login-box" style="width: 100%; max-width: 400px;">
-                <div class="login-logo">
-                    <a href="{{ route('home') }}" style="color: #3490dc; font-weight: 700; font-size: 2rem;">{{ config('app.name', 'Laravel') }}</a>
-                </div>
-                <div class="card" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-                    <div class="card-body login-card-body" style="border-radius: 10px;">
-                        @if (Session::has('reset_success'))
-                            <div class="alert alert-success" role="alert">
-                                {{ Session::get('reset_success') }}
-                            </div>
-                        @endif
+      {{-- Kiri: Gambar & Branding --}}
+<div style="flex: 1; position: relative; background-image: url('{{ asset('assetsLanding/img/koperasi_waserba2.jpg') }}'); background-size: cover; background-position: center;">
 
-                        <p class="login-box-msg" style="font-size: 1.2rem; color: #555;">Sign in to start your session</p>
+    {{-- Overlay transparan --}}
+    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5);"></div>
 
-                        <form action="{{ route('login') }}" method="post">
-                            @csrf
-                            <div class="input-group mb-3">
-                                <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" placeholder="Email" style="border-radius: 30px; padding: 10px;">
-                                <div class="input-group-append">
-                                    <div class="input-group-text" style="border-radius: 0 30px 30px 0;">
-                                        <span class="fas fa-envelope"></span>
-                                    </div>
-                                </div>
-                                @error('email')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
-                            </div>
-                            <div class="input-group mb-3">
-                                <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" id="password" placeholder="Password" style="border-radius: 30px; padding: 10px;">
-                                <div class="input-group-append">
-                                    <div class="input-group-text" style="border-radius: 0 30px 30px 0;">
-                                        <span class="fas fa-lock"></span>
-                                    </div>
-                                    <div class="input-group-text" style="border-radius: 0 30px 30px 0;">
-                                        <i class="fas fa-eye" id="togglePassword" style="cursor: pointer;"></i>
-                                    </div>
-                                </div>
-                                @error('password')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
-                            </div>
-                        </div>
+    {{-- Teks di atas gambar --}}
+    <div style="position: relative; z-index: 1; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; padding: 40px; text-align: center;">
+        <h1 style="font-family: monospace; font-size: 2rem; font-weight: bold;">Koperasi WaSerba</h1>
+        <h2 style="font-family: monospace; font-size: 1.5rem;">Karyawan</h2>
+    </div>
 
-                        <script src="{{ asset('js/togglepassword.js') }}"></script>
+</div>
 
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="d-flex justify-content-between align-items-center icheck-primary">
-                                        <div>
-                                            <input type="checkbox" id="remember" name="remember" {{ old('remember') ? 'checked' : '' }}>
-                                            <label for="remember" style="color: #555;">
-                                                {{ __('Remember Me') }}
-                                            </label>
-                                        </div>
-                                        @if (Route::has('password.request'))
-                                        <p class="mb-0 ml-auto">
-                                            <a href="{{ route('password.request') }}" style="color: #3490dc;">{{ __('Forgot Your Password?') }}</a>
-                                        </p>
-                                        @endif
-                                    </div>
-                                </div>
+        {{-- Kanan: Form Login --}}
+        <div style="flex: 1; background-color: white; display: flex; justify-content: center; align-items: center;">
+            <div style="width: 100%; max-width: 400px;">
+                <h3 style="font-weight: normal; margin-bottom: 30px;">      
+                </h3>
 
-                                <div class="col-12">
-                                    <button type="submit" class="btn btn-primary btn-block" style="border-radius: 30px; background-color: #3490dc; border: none;">{{ __('Login') }}</button>
-                                </div>
-                            </div>
-                        </form>
-
-                        @if (Route::has('register'))
-                        <p class="mb-4 text-center">
-                            <a href="{{ route('register') }}" style="color: #3490dc;">{{ __('Do Not have an account? Register Here') }}</a>
-                        </p>
-                        @endif
+                @if (Session::has('reset_success'))
+                    <div class="alert alert-success">
+                        {{ Session::get('reset_success') }}
                     </div>
-                </div>
+                @endif
+
+                <form action="{{ route('login') }}" method="post">
+                    @csrf
+
+                    {{-- Email --}}
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
+                            placeholder="Email" value="{{ old('email') }}" required>
+                        @error('email')
+                            <span class="invalid-feedback d-block">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    {{-- Password --}}
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        <input type="password" name="password" id="password"
+                            class="form-control @error('password') is-invalid @enderror" placeholder="Password" required>
+                        <span class="input-group-text" style="cursor:pointer;">
+                            <i class="fas fa-eye" id="togglePassword"></i>
+                        </span>
+                        @error('password')
+                            <span class="invalid-feedback d-block">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    {{-- Tombol Login --}}
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary w-100" style="border-radius: 6px;">Log in</button>
+                    </div>
+
+                </form>
             </div>
         </div>
     </div>
+
+    {{-- Toggle Password --}}
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            const password = document.getElementById('password');
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+        });
+    </script>
 </body>
 @endsection

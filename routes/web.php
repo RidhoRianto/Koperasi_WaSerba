@@ -1,14 +1,19 @@
 <?php
 
+use App\Http\Controllers\AnggotaController;
+use App\Http\Controllers\ItemController;
 use App\Http\Controllers\IncomeController;
+use App\Http\Controllers\KasirController;
 use App\Http\Controllers\ExpenseController;
-use App\Http\Controllers\DebtController;
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\SaldoController;
 use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\RegisterController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -22,38 +27,35 @@ use App\Http\Controllers\RegisterController;
 */
 
 Route::get('/', function () {
-    return view('Landing Page.index');
+    return view('auth.login');
 });
-
-Route::get('/fitur', function () {
-    return view('Landing Page.fitur');
-});
-
-Route::get('/about', function () {
-    return view('Landing Page.about');
-});
-
-Route::get('/contact', function () {
-    return view('Landing Page.contact');
-});
-
-// untuk menangani register
-Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
-
-Route::middleware(['auth', 'verified'])->group(function () {
+    // untuk menangani register
+    Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
+    Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+   
+    //Route Anggota
+    Route::resource('/anggota', AnggotaController::class);
+    
+    //Route Barang
+    Route::resource('/barang', ItemController::class);
 
-    //Route Profile
-    Route::get('/profile/edit', [UserProfileController::class, 'edit'])->name('profile.edit');
-    Route::put('/profile/update', [UserProfileController::class, 'update'])->name('profile.update');
+    //Route Kasir
+    Route::get('/kasir', [KasirController::class, 'index'])->name('kasir.index');
+    Route::post('kasir/preview', [KasirController::class, 'preview'])->name('kasir.preview');
+    Route::post('kasir/simpan', [KasirController::class, 'simpan'])->name('kasir.simpan');
+    Route::get('/kasir/riwayat', [KasirController::class, 'riwayat'])->name('kasir.riwayat');
 
     //Route Income
+    Route::get('/daily-income-chart', [IncomeController::class, 'dailyIncomeChart'])->name('daily.income.chart');
     Route::get('/income', [IncomeController::class, 'index'])->name('index.income');
     Route::get('/form-income', [IncomeController::class, 'create'])->name('create.income');
     Route::post('/store-income', [IncomeController::class, 'store'])->name('store.income');
     Route::get('/edit-income/{id}', [IncomeController::class, 'edit'])->name('edit.income');
     Route::delete('/delete-income/{id}', [IncomeController::class, 'destroy'])->name('delete.income');
     Route::put('/update-income/{id}', [IncomeController::class, 'update'])->name('update.income');
+    Route::get('/update-monthly-income', [IncomeController::class, 'updateMonthlyIncomeFromKasir'])->name('update.monthly.income'); // Tambahkan ini
+
 
     //Route Expense
     Route::get('/expense', [ExpenseController::class, 'index'])->name('index.expense');
@@ -63,14 +65,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/delete-expense/{id}', [ExpenseController::class, 'destroy'])->name('delete.expense');
     Route::put('/update-expense/{id}', [ExpenseController::class, 'update'])->name('update.expense');
 
-    //Route Debts
-    Route::get('/debt', [DebtController::class, 'index'])->name('index.debt');
-    Route::get('/form-debt', [DebtController::class, 'create'])->name('create.debt');
-    Route::post('/store-debt', [DebtController::class, 'store'])->name('store.debt');
-    Route::get('/edit-debt/{id}', [DebtController::class, 'edit'])->name('edit.debt');
-    Route::delete('/delete-debt/{id}', [DebtController::class, 'destroy'])->name('delete.debt');
-    Route::put('/update-debt/{id}', [DebtController::class, 'update'])->name('update.debt');
-
     // Routes Bills
     Route::get('/bill', [BillController::class, 'index'])->name('index.bill');
     Route::get('/form-bill', [BillController::class, 'create'])->name('create.bill');
@@ -79,9 +73,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/delete-bill/{id}', [BillController::class, 'destroy'])->name('delete.bill');
     Route::put('/update-bill/{id}', [BillController::class, 'update'])->name('update.bill');
 
+    // Route Saldo
+    Route::get('/saldo', [SaldoController::class, 'index'])->name('saldo.index');
+    Route::get('/saldo/edit', [SaldoController::class, 'edit'])->name('saldo.edit');
+    Route::put('/saldo', [SaldoController::class, 'update'])->name('saldo.update');
+
     // Route Report
     Route::get('/report', [ReportController::class, 'index'])->name('index.report');
     Route::get('/report/pdf', [ReportController::class, 'downloadPDF'])->name('report.pdf');
+
+    // Route Profile 
+    Route::get('/profil', [UserProfileController::class, 'show'])->name('profil.show');
+
+    // Route Profile Edit dan Update
+    Route::get('/profile/edit', [UserProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/update', [UserProfileController::class, 'update'])->name('profile.update');
 });
 
 
@@ -108,3 +114,6 @@ Route::get('/due-bills', [BillController::class, 'getDueBills']);
 Route::put('/bills/mark-as-paid/{id}', [BillController::class, 'markAsPaid'])->name('bills.markAsPaid');
 
 Route::get('/due-debts', [DebtController::class, 'getDueDebts'])->name('due-debts');
+ 
+
+

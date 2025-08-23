@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Anggota;
 use App\Models\Income;
 use App\Models\expense;
-use App\Models\debt;
-use App\Models\bill;
+use App\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Carbon\CarbonPeriod;
@@ -37,8 +37,8 @@ class HomeController extends Controller
         // Total
         $totalIncome = Income::where('user_id', $user->id)->sum('amount');
         $totalExpense = Expense::where('user_id', $user->id)->sum('amount');
-        $totalDebt = Debt::where('user_id', $user->id)->sum('amount');
-        $totalBill = Bill::where('user_id', $user->id)->sum('amount');
+        $jumlahAnggota = Anggota::count();
+        $jumlahBarang = Item::count();
 
         // Tentukan rentang bulan (misalnya 12 bulan terakhir)
         $start = Carbon::now()->subMonths(5)->startOfMonth();
@@ -78,24 +78,9 @@ class HomeController extends Controller
         });
         $expenseData = $fillData($expenseData, $months);
 
-        // Debt
-        $debts = Debt::where('user_id', $user->id)->get();
-        $debtData = $debts->groupBy(function ($debt) {
-            return Carbon::parse($debt->date)->format('F Y');
-        })->map(function ($groupedDebts) {
-            return $groupedDebts->sum('amount');
-        });
-        $debtData = $fillData($debtData, $months);
+        //saldo
+        $saldo = \App\Models\Saldo::first();
 
-        // Bill
-        $bills = Bill::where('user_id', $user->id)->get();
-        $billData = $bills->groupBy(function ($bill) {
-            return Carbon::parse($bill->date)->format('F Y');
-        })->map(function ($groupedBills) {
-            return $groupedBills->sum('amount');
-        });
-        $billData = $fillData($billData, $months);
-
-        return view('home', compact('totalIncome', 'totalExpense', 'totalDebt', 'totalBill', 'incomeData', 'expenseData', 'debtData', 'billData', 'months'));
+        return view('home', compact('saldo','totalIncome', 'totalExpense', 'incomeData', 'expenseData', 'months', 'jumlahAnggota','jumlahBarang'));
     }
 }
