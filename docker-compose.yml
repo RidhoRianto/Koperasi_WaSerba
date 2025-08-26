@@ -27,6 +27,8 @@ services:
       MYSQL_PASSWORD: user_password
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./database/DatabaseKoperasi.sql:/docker-entrypoint-initdb.d/DatabaseKoperasi.sql
+
     ports:
       - "3306:3306"
     networks:
