@@ -1,54 +1,50 @@
 version: '3.8'
 
 services:
-    # Service aplikasi Laravel
-    app:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        container_name: app
-        restart: always
-        volumes:
-            - ./:/var/www/html
-        ports:
-            - "9000:9000"
-        networks:
-            - app-network
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: laravel-app
+    container_name: app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+    networks:
+      - app-network
 
-    # Service Nginx
-    nginx:
-        image: nginx:stable-alpine
-        container_name: nginx
-        restart: always
-        ports:
-            - "9001:443" # Port 9001 untuk HTTPS
-        volumes:
-            - ./:/var/www/html
-            - ./nginx/conf.d/:/etc/nginx/conf.d/
-            - ./nginx/certs/:/etc/nginx/certs/
-        depends_on:
-            - app
-        networks:
-            - app-network
+  db:
+    image: mysql:8.0
+    container_name: db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: laravel_db
+      MYSQL_ROOT_PASSWORD: your_root_password
+      MYSQL_PASSWORD: your_db_password
+      MYSQL_USER: laravel_user
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - app-network
 
-    # Service database MySQL
-    db:
-        image: mysql:8.0
-        container_name: db
-        restart: always
-        environment:
-            MYSQL_DATABASE: 'laradminlte' # Sesuai dengan .env.example
-            MYSQL_USER: 'laraveluser' # Sesuai dengan .env.example
-            MYSQL_PASSWORD: 'laravel123' # Sesuai dengan .env.example
-            MYSQL_ROOT_PASSWORD: 'passwordroot'
-        volumes:
-            - dbdata:/var/lib/mysql
-        networks:
-            - app-network
-
-volumes:
-    dbdata:
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - "9001:443"
+    volumes:
+      - .:/var/www/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/certs:/etc/nginx/certs
+    networks:
+      - app-network
 
 networks:
-    app-network:
-        driver: bridge
+  app-network:
+    driver: bridge
+
+volumes:
+  dbdata:
+    driver: local
