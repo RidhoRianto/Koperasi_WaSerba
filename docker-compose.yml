@@ -26,10 +26,9 @@ services:
       MYSQL_USER: laravel_user
       MYSQL_PASSWORD: user_password
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-      
+
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./database/DatabaseKoperasi.sql:/docker-entrypoint-initdb.d/DatabaseKoperasi.sql
 
     ports:
       - "3306:3306"
