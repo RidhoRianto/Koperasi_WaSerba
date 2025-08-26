@@ -46,10 +46,12 @@ services:
       MYSQL_DATABASE: laradminlte
       MYSQL_USER: laraveluser
       MYSQL_PASSWORD: "laravel123"
+      MYSQL_ROOT_HOST: "%"
     volumes:
       - dbdata:/var/lib/mysql
     networks:
       - laravel
+    command: --default-authentication-plugin=mysql_native_password --bind-address=0.0.0.0
 
 networks:
   laravel:
